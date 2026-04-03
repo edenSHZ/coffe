@@ -1,0 +1,586 @@
+<!DOCTYPE html>
+<html lang="es" id="htmlLang">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title data-translate="main_title">Go Tours</title>
+    <link rel="stylesheet" href="css/styles.css">
+    <link rel="stylesheet" href="css/paquetes.css">
+    <link rel="stylesheet" href="css/ofertas.css">
+    <style>
+    
+        .language-selector {
+            position: relative;
+        }
+        
+        .language-btn {
+            background-color: #008080;
+            border: none;
+            color: #fff;
+            padding: 8px 24px;
+            border-radius: 50px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 16px;
+            min-width: 120px;
+        }
+        
+        .language-menu {
+            position: absolute;
+            top: 100%;
+            left: 0;
+            background: #fff;
+            border-radius: 8px;
+            margin-top: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            display: none;
+            min-width: 120px;
+            z-index: 1000;
+        }
+        
+        .language-menu.show {
+            display: block;
+        }
+        
+        .dropdown-icon {
+            transition: transform 0.3s ease;
+        }
+        
+        .language-option {
+            display: block;
+            padding: 10px 20px;
+            color: #333;
+            text-decoration: none;
+            transition: background-color 0.3s;
+        }
+        
+        .language-option:hover {
+            background-color: #f5f5f5;
+        }
+        
+        /* Nuevos estilos para el user-selector */
+        .user-selector {
+            position: relative;
+            margin-left: 15px;
+        }
+        
+        .user-btn {
+            background: none;
+            border: none;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 8px 12px;
+            border-radius: 50px;
+            transition: background-color 0.3s;
+        }
+        
+        .user-btn:hover {
+            background-color: rgba(0, 128, 128, 0.1);
+        }
+        
+        .user-btn svg {
+            fill: #008080;
+            width: 56px;
+            height: 56px;
+        }
+        
+        .user-menu {
+            position: absolute;
+            top: 100%;
+            right: 0;
+            background: #fff;
+            border-radius: 8px;
+            margin-top: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            display: none;
+            min-width: 180px;
+            z-index: 1000;
+        }
+        
+        .user-menu.show {
+            display: block;
+        }
+        
+        .user-option {
+            display: block;
+            padding: 10px 20px;
+            color: #333;
+            text-decoration: none;
+            transition: all 0.3s;
+        }
+        
+        .user-option:hover {
+            background-color: #f5f5f5;
+            color: #008080;
+        }
+        
+        #user-name-display {
+            font-size: 16px;
+            color: #f5f5f5;
+        }
+        
+    .header-wrapper {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 20px;
+}
+
+.header-left {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+.header-right {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+.user-btn {
+    background: none;
+    border: none;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 20px; /* más grande */
+    border-radius: 50px;
+    transition: background-color 0.3s;
+    font-size: 16px; /* texto más legible */
+}
+
+.user-btn:hover {
+    background-color: rgba(0, 128, 128, 0.1);
+}
+
+.user-btn svg {
+    fill: #008080;
+    width: 28px;  /* más grande */
+    height: 28px;
+}
+    </style>
+</head>
+<body>
+<header class="site-header">
+    <div class="header-wrapper">
+        
+        <!-- Lado Izquierdo: Logo y Selector de Idioma -->
+        <div class="header-left">
+            <div class="logo-container">
+                <a href="pagina_inicio.html">
+                    <img src="imagenes/Logo.jpg" class="logo">
+                </a>
+            </div>
+
+            <!-- Selector de idioma -->
+            <div class="language-selector">
+                <button class="language-btn" id="languageBtn">
+                    <span id="current-language">Español</span>
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" width="24" height="24" stroke-width="1.5" class="dropdown-icon">
+                        <path d="M6 9l6 6l6 -6"></path>
+                    </svg>
+                </button>
+                <div class="language-menu" id="languageMenu">
+                    <a href="#" class="language-option" data-lang="es">Español</a>
+                    <a href="#" class="language-option" data-lang="en">English</a>
+                    <a href="#" class="language-option" data-lang="pt">Português</a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Lado Derecho: Contacto y Usuario -->
+        <div class="header-right">
+            <button class="contact-btn" data-translate="contact">Contacto</button>
+
+            <!-- Menú de usuario -->
+            <div class="user-selector">
+                <button class="user-btn" id="userBtn">
+                    <svg width="46" height="46" viewBox="0 0 24 24">
+                        <path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/>
+                    </svg>
+                    <span id="user-name-display"></span>
+                </button>
+                <div class="user-menu" id="userMenu">
+                    <div id="logged-out-options">
+                        <a href="inicio_sesion.html" class="user-option" data-translate="login">Iniciar Sesión</a>
+                    </div>
+                    <div id="logged-in-options" style="display: none;">
+                        <a href="inicio_sesion.html" class="user-option" data-translate="my_bookings">Cambiar de Cuenta</a>
+                        <a href="#" class="user-option" id="logoutBtn" data-translate="logout">Cerrar Sesión</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    </header>
+
+    <main>
+        <h1 data-translate="main_title">Go Tours</h1>
+        <p class="welcome-text" data-translate="welcome_text">Vive experiencias, no solo destinos.</p>
+        
+        <div class="search-container">
+            <div class="search-box">
+                <svg class="search-icon" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <circle cx="11" cy="11" r="8"></circle>
+                    <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+                </svg>
+                <input type="text" data-translate="search_placeholder" placeholder="Buscar..." class="search-input">
+            </div>
+            <button class="search-btn" data-translate="search_button">Buscar</button>
+        </div>
+
+        <section id="carrusel">
+            <div class="carousel-container">
+                <button class="carousel-btn prev-btn">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <polyline points="15 18 9 12 15 6"></polyline>
+                    </svg>
+                </button>
+
+            <div class="carousel-track">
+    <div class="carousel-slide">
+        <img src="imagenes/Paris.jpeg" alt="París" data-translate="paris_alt" class="destination-img">
+        <div class="slide-content">
+            <h3 data-translate="paris_title">París</h3>
+            <div class="slide-buttons">
+                <button class="slide-btn view-btn" data-translate="view_button" onclick="showFullImage('imagenes/Paris.jpeg', 'París')">Ver</button>
+                <button class="slide-btn quote-btn" data-translate="quote_button" onclick="openWhatsApp('Cotización para viaje a París')">Cotizar</button>
+            </div>
+        </div>
+    </div>
+    <div class="carousel-slide">
+        <img src="imagenes/Cuba.jpeg" alt="Cuba" data-translate="cuba_alt" class="destination-img">
+        <div class="slide-content">
+            <h3 data-translate="cuba_title">Cuba</h3>
+            <div class="slide-buttons">
+                <button class="slide-btn view-btn" data-translate="view_button" onclick="showFullImage('imagenes/Cuba.jpeg', 'Cuba')">Ver</button>
+                <button class="slide-btn quote-btn" data-translate="quote_button" onclick="openWhatsApp('Cotización para viaje a Cuba')">Cotizar</button>
+            </div>
+        </div>
+    </div>
+    <div class="carousel-slide">
+        <img src="imagenes/Cozumel.jpg" alt="Cozumel" data-translate="cozumel_alt" class="destination-img">
+        <div class="slide-content">
+            <h3 data-translate="cozumel_title">Cozumel</h3>
+            <div class="slide-buttons">
+                <button class="slide-btn view-btn" data-translate="view_button" onclick="showFullImage('imagenes/Cozumel.jpg', 'Cozumel')">Ver</button>
+                <button class="slide-btn quote-btn" data-translate="quote_button" onclick="openWhatsApp('Cotización para viaje a Cozumel')">Cotizar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal para mostrar la imagen completa -->
+<div id="imageModal" class="modal">
+    <span class="close" onclick="closeModal()">&times;</span>
+    <img class="modal-content" id="modalImage">
+    <div id="caption"></div>
+</div>
+
+<script>
+    // Función para abrir WhatsApp con mensaje específico
+    function openWhatsApp(message) {
+        const phone = "522231157764";  // Código de México (+52) + número sin espacios
+        const defaultMessage = message || "Hola, me gustaría recibir ayuda";
+        window.open(`https://wa.me/${phone}?text=${encodeURIComponent(defaultMessage)}`, '_blank');
+    }
+
+    // Función para mostrar la imagen completa en un modal
+    function showFullImage(imageSrc, title) {
+        const modal = document.getElementById('imageModal');
+        const modalImg = document.getElementById("modalImage");
+        const captionText = document.getElementById("caption");
+        
+        modal.style.display = "block";
+        modalImg.src = imageSrc;
+        captionText.innerHTML = title;
+    }
+
+    // Función para cerrar el modal
+    function closeModal() {
+        document.getElementById('imageModal').style.display = "none";
+    }
+
+    // Cerrar modal al hacer clic fuera de la imagen
+    window.onclick = function(event) {
+        const modal = document.getElementById('imageModal');
+        if (event.target == modal) {
+            modal.style.display = "none";
+        }
+    }
+</script>
+
+<style>
+    /* Estilos para el modal */
+    .modal {
+        display: none;
+        position: fixed;
+        z-index: 1000;
+        padding-top: 100px;
+        left: 0;
+        top: 0;
+        width: 100%;
+        height: 100%;
+        overflow: auto;
+        background-color: rgba(0,0,0,0.9);
+    }
+
+    .modal-content {
+        margin: auto;
+        display: block;
+        width: 80%;
+        max-width: 700px;
+    }
+
+    #caption {
+        margin: auto;
+        display: block;
+        width: 80%;
+        max-width: 700px;
+        text-align: center;
+        color: #ccc;
+        padding: 10px 0;
+        height: 150px;
+    }
+
+    .close {
+        position: absolute;
+        top: 15px;
+        right: 35px;
+        color: #f1f1f1;
+        font-size: 40px;
+        font-weight: bold;
+        transition: 0.3s;
+    }
+
+    .close:hover,
+    .close:focus {
+        color: #bbb;
+        text-decoration: none;
+        cursor: pointer;
+    }
+</style>
+
+                <button class="carousel-btn next-btn">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <polyline points="9 18 15 12 9 6"></polyline>
+                    </svg>
+                </button>
+            </div>
+        </section>
+
+        <section id="ofertas">
+            <h2 data-translate="promotions_title">Promociones</h2>
+            <div class="promociones-carousel">
+                <button class="promo-btn prev-promo" aria-label="Anterior">
+                    <!-- Icono SVG -->
+                </button>
+                
+                <div class="promociones-container">
+                    <div class="promociones-track" id="promocionesTrack">
+                        <div class="loading-state">
+                            <div class="spinner"></div>
+                            <p data-translate="loading_promos">Cargando promociones...</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <button class="promo-btn next-promo" aria-label="Siguiente">
+                    <!-- Icono SVG -->
+                </button>
+            </div>
+            
+            <div class="error-state" style="display:none;">
+                <p data-translate="error_promos">Error al cargar promociones</p>
+                <button class="retry-btn" data-translate="retry_button">Reintentar</button>
+            </div>
+        </section>
+    </main>
+
+    <footer class="site-footer">
+        <div class="footer-wrapper">
+            <div class="footer-content">
+                <div class="footer-top">
+                    <div class="contact-info">
+                        <p data-translate="footer_address">Av. Colón Num, 200 Centro, Tepeaca, Mexico</p>
+                        <p data-translate="footer_phone">Teléfono: 223 101 1997</p>
+                        <p data-translate="footer_email">Correo: coffeetours.puebla@gmail.com</p>
+                    </div>
+                    <div class="footer-links">
+                        <a href="reseñas-y-comentarios.html" data-translate="reviews_link">Reseñas y Comentarios</a>
+                        <a href="nosotros.html" data-translate="about_link">Sobre Nosotros</a>
+                        <a href="aviso-de-privacidad.html" data-translate="priv_link">Aviso de privacidad</a>
+                       
+                        <a href="agradecimientos.html" data-translate="agra_link">Agradecimientos</a>
+                      
+                    </div>
+                </div>
+                <div class="footer-divider"></div>
+
+                <div class="bottom-footer">
+                    <div class="footer-social">
+                        <a href="https://www.instagram.com/coffeetours" target="_blank" class="social-icon">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
+                                <path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/>
+                            </svg>
+                        </a>
+                        <a href="https://www.facebook.com/coffeetours" target="_blank" class="social-icon">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
+                                <path d="M9 8h-3v4h3v12h5v-12h3.642l.358-4h-4v-1.667c0-.955.192-1.333 1.115-1.333h2.885v-5h-3.808c-3.596 0-5.192 1.583-5.192 4.615v3.385z"/>
+                            </svg>
+                        </a>
+                    </div>
+                    <div class="copyright-notice">
+                        <p data-translate="footer_disclaimer">Coffee Tours no es responsable del contenido de los sitios web externos.</p>
+                        <p data-translate="footer_copyright">© 2025 Coffee Tours. Todos los derechos reservados.</p>
+                    </div>
+                   <script>
+                    function openWhatsApp() {
+                    const phone = "522231157764";  // Código de México (+52) + número sin espacios
+                    const defaultMessage = "Hola, me gustaría recibir ayuda"; // Mensaje opcional
+                    window.open(`https://wa.me/${phone}?text=${encodeURIComponent(defaultMessage)}`, '_blank');
+                    }
+                </script>
+
+                  <button type="button" class="chat-boot-btn" onclick="openWhatsApp()">
+                  <svg xmlns="http://www.w3.org/2000/svg"
+                        viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                        stroke-linecap="round" stroke-linejoin="round" width="20"
+                        height="20" stroke-width="2">
+                            <path d="M18 4a3 3 0 0 1 3 3v8a3 3 0 0 1 -3 3h-5l-5 3v-3h-2a3 3 0 0 1 -3 -3v-8a3 3 0 0 1 3 -3h12z"></path>
+                            <path d="M9.5 9h.01"></path> <path d="M14.5 9h.01"></path>
+                            <path d="M9.5 13a3.5 3.5 0 0 0 5 0"></path>
+                   <span>Ayuda</span>
+                   </button>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script src="scripts/carrusel.js"></script>
+    <script src="scripts/header.js"></script>
+    <script src="scripts/traducciones.js"></script>
+    <script src="scripts/reservas.js"></script>
+    <script src="scripts/promociones.js"></script>
+    
+    <script>
+        // 1. CÓDIGO ORIGINAL DE CAMBIO DE IDIOMA (exactamente como lo tenías)
+        function changeLanguage(lang) {
+            localStorage.setItem('preferredLanguage', lang);
+            document.getElementById('htmlLang').setAttribute('lang', lang);
+            
+            document.getElementById('current-language').textContent = 
+                lang === 'es' ? 'Español' : lang === 'en' ? 'English' : 'Português';
+            
+            document.querySelectorAll('[data-translate]').forEach(el => {
+                const key = el.getAttribute('data-translate');
+                if (translations[lang][key]) {
+                    if (el.tagName === 'INPUT' && el.hasAttribute('placeholder')) {
+                        el.placeholder = translations[lang][key];
+                    } else if (el.hasAttribute('alt')) {
+                        el.setAttribute('alt', translations[lang][key]);
+                    } else {
+                        el.textContent = translations[lang][key];
+                    }
+                }
+            });
+        }
+
+        document.getElementById('languageBtn').addEventListener('click', function(e) {
+            e.stopPropagation();
+            const menu = document.getElementById('languageMenu');
+            menu.style.display = menu.style.display === 'block' ? 'none' : 'block';
+        });
+
+        document.addEventListener('click', function() {
+            document.getElementById('languageMenu').style.display = 'none';
+        });
+
+        document.querySelectorAll('.language-option').forEach(option => {
+            option.addEventListener('click', function(e) {
+                e.preventDefault();
+                const lang = this.getAttribute('data-lang');
+                changeLanguage(lang);
+            });
+        });
+
+        // 2. NUEVO CÓDIGO PARA EL MENÚ DE USUARIO
+        document.getElementById('userBtn').addEventListener('click', function(e) {
+            e.stopPropagation();
+            const menu = document.getElementById('userMenu');
+            menu.style.display = menu.style.display === 'block' ? 'none' : 'block';
+        });
+
+        document.addEventListener('click', function() {
+            document.getElementById('userMenu').style.display = 'none';
+        });
+
+        function checkLoginStatus() {
+            // En producción, esto haría una llamada a tu backend PHP
+            fetch('check_session.php')
+                .then(response => response.json())
+                .then(data => {
+                    if (data.loggedIn) {
+                        document.getElementById('logged-out-options').style.display = 'none';
+                        document.getElementById('logged-in-options').style.display = 'block';
+                        document.getElementById('user-name-display').textContent = data.username;
+                    } else {
+                        document.getElementById('logged-out-options').style.display = 'block';
+                        document.getElementById('logged-in-options').style.display = 'none';
+                        document.getElementById('user-name-display').textContent = '';
+                    }
+                })
+                .catch(() => {
+                    // Fallback para cuando no hay conexión
+                    const loggedIn = localStorage.getItem('userLoggedIn') === 'true';
+                    if (loggedIn) {
+                        document.getElementById('logged-out-options').style.display = 'none';
+                        document.getElementById('logged-in-options').style.display = 'block';
+                        document.getElementById('user-name-display').textContent = localStorage.getItem('username') || 'Usuario';
+                    }
+                });
+        }
+
+        document.getElementById('logoutBtn').addEventListener('click', function(e) {
+            e.preventDefault();
+            fetch('logout.php')
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        localStorage.removeItem('userLoggedIn');
+                        localStorage.removeItem('username');
+                        checkLoginStatus();
+                    }
+                })
+                .catch(() => {
+                    localStorage.removeItem('userLoggedIn');
+                    localStorage.removeItem('username');
+                    checkLoginStatus();
+                });
+        });
+
+        // Verificar estado de sesión al cargar
+        document.addEventListener('DOMContentLoaded', function() {
+            // Cargar idioma preferido
+            const preferredLanguage = localStorage.getItem('preferredLanguage') || 'es';
+            changeLanguage(preferredLanguage);
+            
+            // Verificar estado de sesión
+            checkLoginStatus();
+        });
+
+        // 3. CÓDIGO ORIGINAL ADICIONAL (sin modificaciones)
+        document.querySelector('.contact-btn').addEventListener('click', function() {
+            window.location.href = 'contacto.html';
+        });
+
+    
+    </script>
+</body>
+</html>

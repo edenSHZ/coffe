@@ -1,0 +1,124 @@
+/* Contenedor del carrusel */
+.promociones-carousel {
+    position: relative;
+    width: 100%;
+    overflow: hidden;
+    padding: 20px 0;
+}
+
+/* Pista del carrusel (donde se mueven las tarjetas) */
+.promociones-track {
+    display: flex;
+    gap: 20px;
+    transition: transform 0.5s ease;
+    padding: 10px 0;
+}
+
+/* Tarjeta individual */
+.promo-card {
+    min-width: 280px;
+    background: white;
+    border-radius: 12px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+    flex-shrink: 0;
+}
+
+/* Imagen (ajustada como en tu referencia) */
+.promo-image {
+    height: 180px;
+    overflow: hidden;
+}
+
+.promo-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.3s ease;
+}
+
+.promo-image:hover img {
+    transform: scale(1.05);
+}
+
+/* Estilo del botón "Reservar" (como en la imagen) */
+.reservar-btn {
+    background: linear-gradient(135deg, #3498db, #2c3e50);
+    color: white;
+    border: none;
+    padding: 12px 25px;
+    border-radius: 25px;
+    font-weight: bold;
+    cursor: pointer;
+    display: block;
+    margin: 15px auto;
+    width: 80%;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    transition: all 0.3s ease;
+}
+
+.reservar-btn:hover {
+    background: linear-gradient(135deg, #2c3e50, #3498db);
+    transform: translateY(-3px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+/* Botones de navegación del carrusel */
+.promo-btn {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    background: rgba(255, 255, 255, 0.8);
+    border: none;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    cursor: pointer;
+    z-index: 10;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+}
+
+.prev-promo {
+    left: 10px;
+}
+
+.next-promo {
+    right: 10px;
+}
+
+.promo-card {
+    min-width: 280px;
+    background: white;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    padding: 20px;
+    margin: 0 10px;
+    flex-shrink: 0;
+}
+
+.promo-header h3 {
+    font-size: 1.5rem;
+    color: #2c3e50;
+    margin-bottom: 10px;
+    text-transform: uppercase;
+}
+
+.promo-body {
+    margin: 15px 0;
+}
+
+.current-price {
+    font-size: 1.8rem;
+    color: #27ae60;
+    font-weight: bold;
+}
+
+.error-message {
+    color: #e74c3c;
+    text-align: center;
+    padding: 20px;
+}

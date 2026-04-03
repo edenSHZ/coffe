@@ -1,0 +1,833 @@
+<!DOCTYPE html>
+<html lang="es" id="htmlLang">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title data-translate="booking_title">Reserva</title>
+    <link rel="stylesheet" href="css/reserva.css">
+    <style>
+        /* Estilos para el menú de idiomas */
+        .language-menu {
+            display: none;
+            position: absolute;
+            background: white;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+            z-index: 1000;
+            min-width: 120px;
+        }
+        .language-option {
+            display: block;
+            padding: 8px 16px;
+            color: #333;
+            text-decoration: none;
+        }
+        .language-option:hover {
+            background-color: #f5f5f5;
+        }
+        
+        /* Estilos para las pestañas */
+        .tab-content {
+            display: none;
+            padding: 15px;
+            border: 1px solid #ddd;
+            border-top: none;
+        }
+        .tab-content.active {
+            display: block;
+        }
+
+        /* Ajustes para el formulario de reserva */
+        .booking-form {
+            background: #C9A66B;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        .total-price {
+            font-size: 1.2em;
+            margin: 20px 0;
+            color: #2c3e50;
+        }
+
+        .language-selector {
+            position: relative;
+        }
+        
+        .language-btn {
+            background-color: #008080;
+            border: none;
+            color: #fff;
+            padding: 8px 24px;
+            border-radius: 50px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 16px;
+            min-width: 120px;
+        }
+        
+        .language-menu {
+            position: absolute;
+            top: 100%;
+            left: 0;
+            background: #fff;
+            border-radius: 8px;
+            margin-top: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            display: none;
+            min-width: 120px;
+            z-index: 1000;
+        }
+        
+        .language-menu.show {
+            display: block;
+        }
+        
+        .dropdown-icon {
+            transition: transform 0.3s ease;
+        }
+        
+        .user-selector {
+            position: relative;
+            margin-left: 15px;
+        }
+        
+        .user-btn {
+            background: none;
+            border: none;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 8px 12px;
+            border-radius: 50px;
+            transition: background-color 0.3s;
+        }
+        
+        .user-btn:hover {
+            background-color: rgba(0, 128, 128, 0.1);
+        }
+        
+        .user-btn svg {
+            fill: #008080;
+            width: 24px;
+            height: 24px;
+        }
+        
+        .user-menu {
+            position: absolute;
+            top: 100%;
+            right: 0;
+            background: #fff;
+            border-radius: 8px;
+            margin-top: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            display: none;
+            min-width: 180px;
+            z-index: 1000;
+        }
+        
+        .user-menu.show {
+            display: block;
+        }
+        
+        .user-option {
+            display: block;
+            padding: 10px 20px;
+            color: #333;
+            text-decoration: none;
+            transition: all 0.3s;
+        }
+        
+        .user-option:hover {
+            background-color: #f5f5f5;
+            color: #008080;
+        }
+        
+        #user-name-display {
+            font-size: 16px;
+            color: #f5f5f5;
+        }
+        
+        .header-wrapper {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 20px;
+        }
+
+        .header-left {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .header-right {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .user-btn {
+            background: none;
+            border: none;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 10px 20px;
+            border-radius: 50px;
+            transition: background-color 0.3s;
+            font-size: 16px;
+        }
+
+        .user-btn:hover {
+            background-color: rgba(0, 128, 128, 0.1);
+        }
+
+        .user-btn svg {
+            fill: #008080;
+            width: 28px;
+            height: 28px;
+        }
+
+        .payment-method {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 15px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 16px;
+        }
+
+        /* Estilos para el popup de éxito */
+        #reserva-popup {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.8);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 10000;
+            animation: fadeIn 0.3s;
+        }
+
+        #reserva-popup .popup-content {
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            text-align: center;
+            max-width: 80%;
+            width: 400px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+        }
+
+        #reserva-popup .success-icon {
+            width: 64px;
+            height: 64px;
+            margin-bottom: 20px;
+        }
+
+        #reserva-popup h3 {
+            color: #008080;
+            margin-bottom: 15px;
+            font-size: 1.5em;
+        }
+
+        #reserva-popup p {
+            font-size: 1.1em;
+            color: #555;
+        }
+
+        /* Spinner */
+        .spinner {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 3px solid rgba(0, 128, 128, 0.3);
+            border-radius: 50%;
+            border-top-color: #008080;
+            animation: spin 1s ease-in-out infinite;
+            margin-left: 10px;
+            vertical-align: middle;
+        }
+
+        /* Animaciones */
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+    </style>
+</head>
+<body>
+    <header class="site-header">
+        <div class="header-wrapper">
+            <div class="header-left">
+                <div class="logo-container">
+                    <a href="pagina_inicio.html">
+                        <img src="imagenes/logo.png" class="logo">
+                    </a>
+                </div>
+
+                <div class="language-selector">
+                    <button class="language-btn" id="languageBtn">
+                        <span id="current-language">Español</span>
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" width="24" height="24" stroke-width="1.5" class="dropdown-icon">
+                            <path d="M6 9l6 6l6 -6"></path>
+                        </svg>
+                    </button>
+                    <div class="language-menu" id="languageMenu">
+                        <a href="#" class="language-option" data-lang="es">Español</a>
+                        <a href="#" class="language-option" data-lang="en">English</a>
+                        <a href="#" class="language-option" data-lang="pt">Português</a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="header-right">
+                <button class="contact-btn" data-translate="contact">Contacto</button>
+
+                <div class="user-selector">
+                    <button class="user-btn" id="userBtn">
+                        <svg width="46" height="46" viewBox="0 0 24 24">
+                            <path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/>
+                        </svg>
+                        <span id="user-name-display"></span>
+                    </button>
+                    <div class="user-menu" id="userMenu">
+                        <div id="logged-out-options">
+                            <a href="inicio_sesion.html" class="user-option" data-translate="login">Iniciar Sesión</a>
+                        </div>
+                        <div id="logged-in-options" style="display: none;">
+                            <a href="inicio_sesion.html" class="user-option" data-translate="my_bookings">Cambiar de Cuenta</a>
+                            <a href="#" class="user-option" id="logoutBtn" data-translate="logout">Cerrar Sesión</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <main class="main-content">
+        <div class="booking-container">
+            <div class="tour-info">
+                <input type="text" id="destination-input" class="destination-input" readonly data-translate="destination">
+                <input type="hidden" id="package-id" name="package_id" value="">
+
+                <div class="carousel">
+                    <button class="carousel-btn prev">&#10094;</button>
+                    <img src="" id="tour-image" class="carousel-img" alt="Imagen del paquete">
+                    <button class="carousel-btn next">&#10095;</button>
+                </div>
+
+                <div class="tour-tabs">
+                    <button class="tab-btn active" data-translate="tab_description" data-tab="description">Descripción</button>
+                    <button class="tab-btn" data-translate="tab_itinerary" data-tab="itinerary">Itinerario</button>
+                    <button class="tab-btn" data-translate="tab_included" data-tab="included">Incluye</button>
+                    <button class="tab-btn" data-translate="tab_testimonials" data-tab="testimonials">Testimonios</button>
+                </div>
+
+                <div class="tab-content active" id="description-tab">
+                    <div class="tour-description">
+                        <p id="tour-description-text"></p>
+                        <button class="print-btn">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
+                                <path d="M19 8h-1V3H6v5H5c-1.66 0-3 1.34-3 3v6h4v4h12v-4h4v-6c0-1.66-1.34-3-3-3zM8 5h8v3H8V5zm8 12v2H8v-4h8v2zm2-2v-2H6v2H4v-4c0-.55.45-1 1-1h14c.55 0 1 .45 1 1v4h-2z"/>
+                            </svg>
+                            <span data-translate="print_button">Imprimir</span>
+                        </button>
+                    </div>
+                </div>
+
+                <div class="tab-content" id="itinerary-tab">
+                    <h3>Itinerario</h3>
+                    <ul id="itinerary-list">
+                        <!-- Se llenará dinámicamente -->
+                    </ul>
+                </div>
+
+                <div class="tab-content" id="included-tab">
+                    <h3>El paquete incluye</h3>
+                    <ul id="included-list">
+                        <!-- Se llenará dinámicamente -->
+                    </ul>
+                </div>
+
+                <div class="tab-content" id="testimonials-tab">
+                    <h3>Testimonios de viajeros</h3>
+                    <div id="testimonials-content">
+                        <p>Próximamente...</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="booking-form">
+                <h2 id="base-price" data-translate="base_price">$ Precio base</h2>
+
+                <form id="formReserva" method="POST">
+                    <input type="hidden" name="id_paquete" id="package-id-input" value="">
+                    <input type="hidden" name="monto_total" id="input-monto-total" value="">
+
+                    <div class="form-group">
+                        <label data-translate="start_date">Fecha de inicio</label>
+                        <input type="date" name="fecha_viaje" class="form-control" required readonly>
+                    </div>
+
+                    <div class="form-group">
+                        <label data-translate="duration">Duración</label>
+                        <select class="form-control" name="duracion" id="duracion-select" required>
+                            <option value="6d5n" data-noches="5" data-precio="38500">6 días, 5 noches</option>
+                            <option value="10d9n" data-noches="9" data-precio="58500">10 días, 9 noches</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label data-translate="people">Personas</label>
+                        <select class="form-control" name="personas" id="personas-select" required>
+                            <option value="1" data-translate="option_1_person">1 persona</option>
+                            <option value="2" data-translate="option_2_people">2 personas</option>
+                            <option value="3" data-translate="option_3_people">3 personas</option>
+                            <option value="4" data-translate="option_4_people">4 personas</option>
+                            <option value="5" data-translate="option_5_people">5 personas</option>
+                        </select>
+                    </div>
+
+                    <div class="payment-section">
+                        <h3 data-translate="payment_method">¿Cómo desea pagar?</h3>
+                        <select class="payment-method" id="paymentMethod" name="id_metodo" required>
+                            <option value="" disabled selected>Seleccione un método de pago</option>
+                            <option value="1">PayPal</option>
+                            <option value="2">Efectivo</option>
+                            <option value="3">Tarjeta de crédito</option>
+                        </select>
+                    </div>
+
+                    <div class="total-price">
+                        <h3 data-translate="total">Total</h3>
+                        <span class="price" id="total-price">$0</span>
+                    </div>
+
+                    <button type="submit" class="continue-btn">Continuar reserva</button>
+                </form>
+            </div>
+        </div>
+    </main>
+
+    <footer class="site-footer">
+        <div class="footer-wrapper">
+            <div class="footer-content">
+                <div class="footer-top">
+                    <div class="contact-info">
+                        <p data-translate="footer_address">Av. Colón Num, 200 Centro, Tepeaca, Mexico</p>
+                        <p data-translate="footer_phone">Teléfono: 223 101 1997</p>
+                        <p data-translate="footer_email">Correo: coffeetours.puebla@gmail.com</p>
+                    </div>
+                    <div class="footer-links">
+                        <a href="reseñas-y-comentarios.html" data-translate="reviews_link">Reseñas y Comentarios</a>
+                        <a href="nosotros.html" data-translate="about_link">Sobre Nosotros</a>
+                        <a href="aviso-de-privacidad.html" data-translate="priv_link">Aviso de privacidad</a>
+                        <a href="agradecimientos.html" data-translate="agra_link">Agradecimientos</a>
+                    </div>
+                </div>
+                <div class="footer-divider"></div>
+                <div class="bottom-footer">
+                    <div class="footer-social">
+                        <a href="https://www.instagram.com/coffeetours" target="_blank" class="social-icon">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
+                                <path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/>
+                            </svg>
+                        </a>
+                        <a href="https://www.facebook.com/coffeetours" target="_blank" class="social-icon">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
+                                <path d="M9 8h-3v4h3v12h5v-12h3.642l.358-4h-4v-1.667c0-.955.192-1.333 1.115-1.333h2.885v-5h-3.808c-3.596 0-5.192 1.583-5.192 4.615v3.385z"/>
+                            </svg>
+                        </a>
+                    </div>
+                    <div class="copyright-notice">
+                        <p data-translate="footer_disclaimer">Coffee Tours no es responsable del contenido de los sitios web externos.</p>
+                        <p data-translate="footer_copyright">© 2025 Coffee Tours. Todos los derechos reservados.</p>
+                    </div>
+                    <button type="button" class="chat-boot-btn">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" width="20" height="20" stroke-width="2">
+                            <path d="M18 4a3 3 0 0 1 3 3v8a3 3 0 0 1 -3 3h-5l-5 3v-3h-2a3 3 0 0 1 -3 -3v-8a3 3 0 0 1 3 -3h12z"></path>
+                            <path d="M9.5 9h.01"></path> <path d="M14.5 9h.01"></path>
+                            <path d="M9.5 13a3.5 3.5 0 0 0 5 0"></path>
+                        </svg>
+                        <span data-translate="help_text">Ayuda</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script src="scripts/traducciones.js"></script>
+    <script>
+        // Datos locales para itinerario e incluidos (backup si falla la BD)
+        const packagesData = {
+            "europa": {
+                "itinerario": [
+                    "Días 1-3: París - Torre Eiffel, Louvre y Notre Dame",
+                    "Días 4-7: Roma - Coliseo, Vaticano y Fontana di Trevi",
+                    "Días 8-10: Barcelona - Sagrada Familia y Parque Güell",
+                    "Día 11: Regreso"
+                ],
+                "incluye": [
+                    "Vuelos redondos en clase turista",
+                    "Alojamiento en hoteles 4 estrellas",
+                    "Desayunos diarios",
+                    "Tours guiados en cada ciudad",
+                    "Transporte entre ciudades"
+                ]
+            },
+            "nickelodeon": {
+                "itinerario": [
+                    "Día 1: Llegada y check-in",
+                    "Día 2: Parque acuático y Slime Time",
+                    "Día 3: Espuma Party y encuentro con personajes",
+                    "Día 4: Día libre en la playa",
+                    "Día 5: Check-out"
+                ],
+                "incluye": [
+                    "Alojamiento todo incluido",
+                    "Acceso ilimitado al parque acuático",
+                    "Shows y eventos de Nickelodeon",
+                    "Comidas y bebidas ilimitadas",
+                    "Actividades para niños y adultos"
+                ]
+            }
+        };
+
+        // Función para cambiar idioma
+        function changeLanguage(lang) {
+            localStorage.setItem('preferredLanguage', lang);
+            document.getElementById('htmlLang').setAttribute('lang', lang);
+            
+            document.getElementById('current-language').textContent = 
+                lang === 'es' ? 'Español' : lang === 'en' ? 'English' : 'Português';
+            
+            document.querySelectorAll('[data-translate]').forEach(el => {
+                const key = el.getAttribute('data-translate');
+                if (translations[lang][key]) {
+                    if (el.tagName === 'INPUT' && el.hasAttribute('placeholder')) {
+                        el.placeholder = translations[lang][key];
+                    } else if (el.hasAttribute('alt')) {
+                        el.setAttribute('alt', translations[lang][key]);
+                    } else {
+                        el.textContent = translations[lang][key];
+                    }
+                }
+            });
+        }
+
+        // Manejo del menú de idiomas
+        document.getElementById('languageBtn').addEventListener('click', function(e) {
+            e.stopPropagation();
+            const menu = document.getElementById('languageMenu');
+            menu.classList.toggle('show');
+            
+            // Rotar ícono
+            const icon = this.querySelector('.dropdown-icon');
+            icon.style.transform = menu.classList.contains('show') ? 'rotate(180deg)' : 'rotate(0)';
+        });
+
+        document.addEventListener('click', function() {
+            document.getElementById('languageMenu').classList.remove('show');
+            document.querySelector('.dropdown-icon').style.transform = 'rotate(0)';
+        });
+
+        document.querySelectorAll('.language-option').forEach(option => {
+            option.addEventListener('click', function(e) {
+                e.preventDefault();
+                const lang = this.getAttribute('data-lang');
+                changeLanguage(lang);
+            });
+        });
+
+        // Manejo del menú de usuario
+        document.getElementById('userBtn').addEventListener('click', function(e) {
+            e.stopPropagation();
+            document.getElementById('userMenu').classList.toggle('show');
+        });
+
+        document.addEventListener('click', function() {
+            document.getElementById('userMenu').classList.remove('show');
+        });
+
+        // Función para verificar estado de sesión
+        function checkLoginStatus() {
+            fetch('check_session.php')
+                .then(response => response.json())
+                .then(data => {
+                    if (data.loggedIn) {
+                        document.getElementById('logged-out-options').style.display = 'none';
+                        document.getElementById('logged-in-options').style.display = 'block';
+                        document.getElementById('user-name-display').textContent = data.username;
+                        
+                        localStorage.setItem('userLoggedIn', 'true');
+                        localStorage.setItem('username', data.username);
+                        localStorage.setItem('userId', data.userId);
+                    } else {
+                        document.getElementById('logged-out-options').style.display = 'block';
+                        document.getElementById('logged-in-options').style.display = 'none';
+                        document.getElementById('user-name-display').textContent = '';
+                        
+                        localStorage.removeItem('userLoggedIn');
+                        localStorage.removeItem('username');
+                        localStorage.removeItem('userId');
+                    }
+                })
+                .catch(() => {
+                    const loggedIn = localStorage.getItem('userLoggedIn') === 'true';
+                    if (loggedIn) {
+                        document.getElementById('logged-out-options').style.display = 'none';
+                        document.getElementById('logged-in-options').style.display = 'block';
+                        document.getElementById('user-name-display').textContent = localStorage.getItem('username') || 'Usuario';
+                    }
+                });
+        }
+
+        // Cerrar sesión
+        document.getElementById('logoutBtn').addEventListener('click', function(e) {
+            e.preventDefault();
+            fetch('logout.php')
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        localStorage.removeItem('userLoggedIn');
+                        localStorage.removeItem('username');
+                        checkLoginStatus();
+                    }
+                })
+                .catch(() => {
+                    localStorage.removeItem('userLoggedIn');
+                    localStorage.removeItem('username');
+                    checkLoginStatus();
+                });
+        });
+
+        // Función para cargar datos del paquete
+        async function loadPackageData(packageId) {
+            try {
+                const response = await fetch(`obtener_paquete.php?id_paquete=${packageId}`);
+                const dbData = await response.json();
+
+                if (dbData.error) throw new Error(dbData.error);
+
+                const localData = packagesData[packageId] || packagesData['europa'];
+
+                document.getElementById('destination-input').value = `Destino: ${dbData.nombre}`;
+                document.getElementById('tour-image').src = dbData.imagen_principal;
+                document.getElementById('tour-description-text').textContent = dbData.descripcion;
+                document.getElementById('package-id').value = packageId;
+                document.getElementById('package-id-input').value = packageId;
+                document.getElementById('base-price').textContent = `$${parseFloat(dbData.precio).toLocaleString('es-MX')}`;
+
+                const fechaInicioInput = document.querySelector('input[name="fecha_viaje"]');
+                fechaInicioInput.value = dbData.fecha_inicio;
+                fechaInicioInput.min = new Date().toISOString().split('T')[0];
+
+                document.getElementById('itinerary-list').innerHTML = 
+                    localData.itinerario.map(item => `<li>${item}</li>`).join('');
+                
+                document.getElementById('included-list').innerHTML = 
+                    localData.incluye.map(item => `<li>${item}</li>`).join('');
+
+                updateTotalPrice();
+
+            } catch (error) {
+                console.error('Error cargando paquete:', error);
+                window.location.href = 'reservar.html';
+            }
+        }
+
+        // Función para actualizar el precio total
+        function updateTotalPrice() {
+            const durationSelect = document.getElementById('duracion-select');
+            const peopleSelect = document.getElementById('personas-select');
+            const basePriceText = document.getElementById('base-price').textContent;
+            
+            const basePrice = parseFloat(basePriceText.replace(/[^0-9.]/g, ''));
+            const durationMultiplier = parseInt(durationSelect.options[durationSelect.selectedIndex].getAttribute('data-noches')) / 5;
+            const people = parseInt(peopleSelect.value);
+            
+            const total = basePrice * durationMultiplier * people;
+            
+            document.getElementById('total-price').textContent = `$${total.toLocaleString('es-MX')}`;
+            document.getElementById('input-monto-total').value = total;
+        }
+
+        // Configurar pestañas
+        function setupTabs() {
+            const tabs = document.querySelectorAll('.tab-btn');
+            tabs.forEach(tab => {
+                tab.addEventListener('click', () => {
+                    document.querySelectorAll('.tab-btn').forEach(t => t.classList.remove('active'));
+                    document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+                    
+                    tab.classList.add('active');
+                    const tabId = tab.getAttribute('data-tab');
+                    document.getElementById(`${tabId}-tab`).classList.add('active');
+                });
+            });
+        }
+
+        // Botón de contacto
+        document.querySelector('.contact-btn').addEventListener('click', function() {
+            window.location.href = 'contacto.html';
+        });
+
+        // Botón de imprimir
+        document.querySelector('.print-btn').addEventListener('click', () => window.print());
+
+        // Función para mostrar mensaje de éxito
+       function showSuccessMessage(message) {
+    const popup = document.createElement('div');
+    popup.id = 'reserva-popup';
+    popup.innerHTML = `
+        <div class="popup-content">
+            <svg viewBox="0 0 24 24" class="success-icon">
+                <path fill="#4CAF50" d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/>
+            </svg>
+            <h3>${message}</h3>
+            <button id="continue-btn" class="continue-button">Continuar</button>
+        </div>
+    `;
+    document.body.appendChild(popup);
+
+    // Agregar estilos dinámicamente
+    const style = document.createElement('style');
+    style.textContent = `
+        #reserva-popup {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.8);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 10000;
+            animation: fadeIn 0.3s;
+        }
+        #reserva-popup .popup-content {
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            text-align: center;
+            max-width: 80%;
+            width: 400px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+        }
+        #reserva-popup .success-icon {
+            width: 64px;
+            height: 64px;
+            margin-bottom: 20px;
+        }
+        #reserva-popup h3 {
+            color: #008080;
+            margin-bottom: 20px;
+            font-size: 1.5em;
+        }
+        .continue-button {
+            background-color: #008080;
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            border-radius: 5px;
+            font-size: 1em;
+            cursor: pointer;
+            transition: background-color 0.3s;
+            margin-top: 15px;
+        }
+        .continue-button:hover {
+            background-color: #006666;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+    `;
+    document.head.appendChild(style);
+
+    // Manejar el clic del botón
+    document.getElementById('continue-btn').addEventListener('click', function() {
+        // Eliminar el popup
+        document.body.removeChild(popup);
+        document.head.removeChild(style);
+        
+        // Redirigir a la página de inicio
+        window.location.href = 'pagina_inicio.html';
+    });
+}
+
+        // Manejo del envío del formulario de reserva
+        document.getElementById('formReserva').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            
+            const button = this.querySelector('button[type="submit"]');
+            const originalText = button.innerHTML;
+            
+            try {
+                // Mostrar estado de carga
+                button.disabled = true;
+                button.innerHTML = 'Procesando... <span class="spinner"></span>';
+
+                // Enviar datos
+                const formData = new FormData(this);
+                const response = await fetch('guardar_reserva.php', {
+                    method: 'POST',
+                    body: formData
+                });
+
+                // Verificar respuesta
+                if (!response.ok) throw new Error('Error en la respuesta del servidor');
+                
+                const result = await response.json();
+                console.log('Respuesta del servidor:', result);
+
+                if (result.success) {
+                    showSuccessMessage(result.message || 'Reserva realizada con éxito');
+                } else {
+                    throw new Error(result.error || 'Error al procesar la reserva');
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                alert(error.message);
+            } finally {
+                button.disabled = false;
+                button.innerHTML = originalText;
+            }
+        });
+
+        // Inicialización de la página
+        document.addEventListener('DOMContentLoaded', function() {
+            // Cargar datos del paquete
+            const urlParams = new URLSearchParams(window.location.search);
+            const packageId = urlParams.get('id') || 'europa';
+            
+            loadPackageData(packageId);
+            setupTabs();
+
+            // Configurar eventos para actualizar precio
+            document.getElementById('duracion-select').addEventListener('change', updateTotalPrice);
+            document.getElementById('personas-select').addEventListener('change', updateTotalPrice);
+
+            // Cargar idioma preferido
+            const preferredLanguage = localStorage.getItem('preferredLanguage') || 'es';
+            changeLanguage(preferredLanguage);
+            
+            // Verificar estado de sesión
+            checkLoginStatus();
+        });
+    </script>
+</body>
+</html>

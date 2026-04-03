@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Registro - Coffee Tours</title>
+    <link rel="stylesheet" href="css/registro-sesion.css">
+    <style>
+        .error-message {
+            color: #ff0000;
+            font-size: 14px;
+            margin-top: 5px;
+            display: none;
+        }
+        .success-message {
+            color: #008000;
+            font-size: 16px;
+            margin: 15px 0;
+            text-align: center;
+            padding: 10px;
+            background-color: #f0fff0;
+            border-radius: 5px;
+        }
+    </style>
+</head>
+<body>
+    <header class="site-header">
+        <div class="header-wrapper">
+            <div class="language-selector">
+                <button class="language-btn" onclick="toggleLanguageMenu()">
+                    <span id="current-language">Español</span>
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" width="24" height="24" stroke-width="1.5" class="dropdown-icon">
+                        <path d="M6 9l6 6l6 -6"></path>
+                    </svg>
+                </button>
+                <div class="language-menu" id="languageMenu">
+                    <a href="#" class="language-option" data-lang="es">Español</a>
+                    <a href="#" class="language-option" data-lang="en">English</a>
+                    <a href="#" class="language-option" data-lang="pt">Português</a>
+                </div>
+            </div>
+
+            <div class="logo-container">
+                <img src="imagenes/logo.png" alt="Coffee Tours Logo" class="logo">
+            </div>
+
+            <div class="header-actions">
+                <button class="contact-btn" data-translate="contact">Contacto</button>
+                <button class="user-btn" aria-label="Perfil de usuario">
+                    <svg width="46" height="46" viewBox="0 0 24 24">
+                        <path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/>
+                    </svg>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <main class="main-content">
+        <div class="form-container">
+            <h1 data-translate="register_title">Crear cuenta / Registro</h1>
+
+            <div id="mensaje-exito" class="success-message" style="display: none;"></div>
+            <div id="mensaje-error" class="error-message" style="display: none;"></div>
+
+            <form action="registrar_usuarios.php" method="post" id="registerForm" class="registration-form">
+                <input type="hidden" id="idioma-hidden" name="idioma" value="es">
+                
+                <div class="form-group">
+                    <label for="username" data-translate="username_label">Nombre de usuario:</label>
+                    <input type="text" id="username" name="username" placeholder="Ingresa tu nombre de usuario" required>
+                    <div id="username-error" class="error-message"></div>
+                </div>
+            
+                <div class="form-group">
+                    <label for="email" data-translate="email_label">Email:</label>
+                    <input type="email" id="email" name="email" placeholder="Ingresa tu correo electrónico" required>
+                    <div id="email-error" class="error-message"></div>
+                </div>
+            
+                <div class="form-group">
+                    <label for="password" data-translate="password_label">Contraseña:</label>
+                    <input type="password" id="password" name="password" placeholder="Ingresa tu contraseña" required minlength="8">
+                    <div id="password-error" class="error-message"></div>
+                </div>
+            
+                <div class="form-group">
+                    <label for="confirm_password" data-translate="confirm_password_label">Confirmar contraseña:</label>
+                    <input type="password" id="confirm_password" name="confirm_password" placeholder="Confirma tu contraseña" required>
+                    <div id="confirm-error" class="error-message"></div>
+                </div>
+                
+                <button type="submit" class="submit-btn" data-translate="register_button">Registrarse</button>
+
+                <p class="terms">
+                    <span data-translate="terms_text">Al continuar, declaras que leíste y aceptas nuestros</span>
+                    <a href="terminos-y-condiciones.html" data-translate="terms_link">Términos y condiciones</a> y el
+                    <a href="aviso-de-privacidad.html" data-translate="privacy_link">Aviso de privacidad</a>.
+                </p>
+            </form>
+        </div>
+    </main>
+
+    <footer class="site-footer">
+        <div class="footer-wrapper">
+            <div class="footer-content">
+                <div class="footer-top">
+                    <div class="contact-info">
+                        <p data-translate="footer_address">Av. Colón Num, 200 Centro, Tepeaca, Mexico</p>
+                        <p data-translate="footer_phone">Teléfono: 223 101 1997</p>
+                        <p data-translate="footer_email">Correo: coffeetours.puebla@gmail.com</p>
+                    </div>
+                    <div class="footer-links">
+                        <a href="reseñas-y-comentarios.html" data-translate="reviews_link">Reseñas y Comentarios</a>
+                        <a href="nosotros.html" data-translate="about_link">Sobre Nosotros</a>
+                    </div>
+                </div>
+                <div class="footer-divider"></div>
+
+                <div class="bottom-footer">
+                    <div class="footer-social">
+                        <a href="https://www.instagram.com/coffeetours" target="_blank" class="social-icon" aria-label="Instagram">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
+                                <path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/>
+                            </svg>
+                        </a>
+                        <a href="https://www.facebook.com/coffeetours" target="_blank" class="social-icon" aria-label="Facebook">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
+                                <path d="M9 8h-3v4h3v12h5v-12h3.642l.358-4h-4v-1.667c0-.955.192-1.333 1.115-1.333h2.885v-5h-3.808c-3.596 0-5.192 1.583-5.192 4.615v3.385z"/>
+                            </svg>
+                        </a>
+                    </div>
+                    <div class="copyright-notice">
+                        <p data-translate="footer_disclaimer">Coffee Tours no es responsable del contenido de los sitios web externos.</p>
+                        <p data-translate="footer_copyright">© 2025 Coffee Tours. Todos los derechos reservados.</p>
+                    </div>
+
+                    <button type="button" class="chat-boot-btn" aria-label="Chat de ayuda">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" width="20" height="20" stroke-width="2">
+                            <path d="M18 4a3 3 0 0 1 3 3v8a3 3 0 0 1 -3 3h-5l-5 3v-3h-2a3 3 0 0 1 -3 -3v-8a3 3 0 0 1 3 -3h12z"></path>
+                            <path d="M9.5 9h.01"></path>
+                            <path d="M14.5 9h.01"></path>
+                            <path d="M9.5 13a3.5 3.5 0 0 0 5 0"></path>
+                        </svg>
+                        <span data-translate="help_text">Ayuda</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </footer>
+    <script src="scripts/traducciones.js"></script>
+    <script>
+  
+        
+
+        // Función para cambiar idioma
+        function changeLanguage(lang) {
+            // Guardar preferencia
+            localStorage.setItem('preferredLanguage', lang);
+            document.getElementById('idioma-hidden').value = lang;
+            
+            // Actualizar botón de idioma
+            document.getElementById('current-language').textContent = 
+                lang === 'es' ? 'Español' : lang === 'en' ? 'English' : 'Português';
+            
+            // Traducir elementos con data-translate
+            document.querySelectorAll('[data-translate]').forEach(el => {
+                const key = el.getAttribute('data-translate');
+                if (translations[lang][key]) {
+                    if (el.tagName === 'INPUT' && el.placeholder) {
+                        el.placeholder = translations[lang][key];
+                    } else {
+                        el.textContent = translations[lang][key];
+                    }
+                }
+            });
+        }
+
+        // Validación del formulario
+        function validateForm() {
+            let isValid = true;
+            
+            // Limpiar errores previos
+            document.querySelectorAll('.error-message').forEach(el => {
+                el.textContent = '';
+                el.style.display = 'none';
+            });
+            
+            // Validar contraseñas coincidan
+            const password = document.getElementById('password').value;
+            const confirmPassword = document.getElementById('confirm_password').value;
+            
+            if (password !== confirmPassword) {
+                const lang = document.getElementById('idioma-hidden').value || 'es';
+                document.getElementById('confirm-error').textContent = translations[lang]['password_mismatch'];
+                document.getElementById('confirm-error').style.display = 'block';
+                isValid = false;
+            }
+            
+            // Validar longitud mínima de contraseña
+            if (password.length < 8) {
+                const lang = document.getElementById('idioma-hidden').value || 'es';
+                document.getElementById('password-error').textContent = translations[lang]['password_length'];
+                document.getElementById('password-error').style.display = 'block';
+                isValid = false;
+            }
+            
+            // Validar formato de email
+            const email = document.getElementById('email').value;
+            if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+                const lang = document.getElementById('idioma-hidden').value || 'es';
+                document.getElementById('email-error').textContent = translations[lang]['invalid_email'];
+                document.getElementById('email-error').style.display = 'block';
+                isValid = false;
+            }
+            
+            return isValid;
+        }
+        
+        // Inicialización al cargar
+        document.addEventListener('DOMContentLoaded', function() {
+            // Cargar idioma guardado o usar español por defecto
+            const lang = localStorage.getItem('preferredLanguage') || 'es';
+            changeLanguage(lang);
+            
+            // Configurar eventos para los botones de idioma
+            document.querySelectorAll('.language-option').forEach(option => {
+                option.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    const lang = this.getAttribute('data-lang');
+                    changeLanguage(lang);
+                });
+            });
+            
+            // Función para mostrar/ocultar menú de idiomas
+            window.toggleLanguageMenu = function() {
+                const menu = document.getElementById('languageMenu');
+                menu.style.display = menu.style.display === 'block' ? 'none' : 'block';
+            };
+            
+            // Validación en tiempo real para confirmar contraseña
+            document.getElementById('confirm_password').addEventListener('input', function() {
+                const password = document.getElementById('password').value;
+                const errorElement = document.getElementById('confirm-error');
+                
+                if (this.value !== password) {
+                    const lang = document.getElementById('idioma-hidden').value || 'es';
+                    errorElement.textContent = translations[lang]['password_mismatch'];
+                    errorElement.style.display = 'block';
+                } else {
+                    errorElement.style.display = 'none';
+                }
+            });
+            
+            // Manejar el envío del formulario
+            document.getElementById('registerForm').addEventListener('submit', function(e) {
+                if (!validateForm()) {
+                    e.preventDefault();
+                }
+               
+            });
+
+            // Acción para el botón de contacto
+            document.querySelector('.contact-btn').addEventListener('click', function() {
+                window.location.href = 'contacto.html';
+            });
+        });
+    </script>
+</body>
+</html>
+

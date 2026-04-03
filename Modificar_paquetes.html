@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="es" id="htmlLang">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin - Coffee Tours</title>
+  <link rel="stylesheet" href="css/admin.css">
+  <link rel="stylesheet" href="css/tabla_usuarios.css">
+  <link rel="stylesheet" href="css/imagenespe.css">
+</head>
+<body class="admin-page">
+  <header class="admin-header">
+    <div class="header-wrapper">
+      <div class="admin-logo">
+          <img src="imagenes/logo.png" alt="Coffee Tours Admin">
+        </a>
+      </div>
+      
+      <nav class="admin-nav">
+        <a href="pagina_inicio.html">Volver al Sitio</a>
+        <button id="logoutBtn">Cerrar Sesión</button>
+      </nav>
+    </div>
+  </header>
+
+  <main class="admin-container">
+    <h1 class="admin-title">Panel de Administración</h1>
+    
+    <div class="admin-panel">
+      <aside class="admin-sidebar">
+        <h3>Menú de Administración</h3>
+        <ul class="admin-menu">
+          <li><a href="#" class="active" data-tab="paquetes">Paquetes</a></li>
+          <li><a href="#" data-tab="usuarios">Usuarios</a></li>
+        </ul>
+      </aside>
+      
+      <section class="admin-content">
+        <!-- Pestañas -->
+        <div class="tabs">
+          <button class="tab-btn active" data-tab="paquetes">Paquetes</button>
+          <button class="tab-btn" data-tab="usuarios">Usuarios</button>
+          <button class="tab-btn" data-tab="reservas">Reservas</button>
+        </div>
+        
+        <!-- Contenido de pestañas -->
+        <div id="paquetes-tab" class="tab-content active">
+          <div class="admin-actions">
+            <button id="addPackageBtn" class="btn btn-primary">+ Nuevo Paquete</button>
+          </div>
+          
+          <div id="packageFormContainer" class="form-container" style="display: none;">
+            <h2 id="formTitle">Agregar Nuevo Paquete</h2>
+            <form id="paqueteForm">
+              <input type="hidden" id="id_paquete" value="">
+              
+              <div class="form-group">
+                <label for="nombre">Nombre del Paquete</label>
+                <input type="text" id="nombre" class="form-control" required>
+              </div>
+              
+              <div class="form-group">
+                <label for="descripcion">Descripción</label>
+                <textarea id="descripcion" class="form-control" required></textarea>
+              </div>
+              
+              <div class="form-group">
+                <label for="precio">Precio (MXN)</label>
+                <input type="number" id="precio" class="form-control" step="0.01" min="0" required>
+              </div>
+              
+              <div class="form-group">
+                <label for="imagen_principal">Imagen (URL)</label>
+                <input type="text" id="imagen_principal" class="form-control" required>
+                <img id="imgPreview" src="" alt="Vista previa" class="img-preview">
+              </div>
+              
+              <div class="form-group">
+                <label for="fecha_inicio">Fecha de Inicio</label>
+                <input type="date" id="fecha_inicio" class="form-control" required>
+              </div>
+              
+              <div class="form-group">
+                <label for="fecha_fin">Fecha de Fin</label>
+                <input type="date" id="fecha_fin" class="form-control" required>
+              </div>
+              
+              <div class="form-group">
+                <button type="submit" class="btn btn-primary">Guardar</button>
+                <button type="button" id="cancelBtn" class="btn btn-danger">Cancelar</button>
+              </div>
+            </form>
+          </div>
+          
+          <h2>Paquetes Existentes</h2>
+          <div class="paquetes-grid" id="paquetesGrid">
+          </div>
+        </div>
+        
+        <div id="usuarios-tab" class="tab-content">
+          <div class="admin-actions">
+            <button id="refreshUsersBtn" class="btn btn-primary">↻ Actualizar</button>
+          </div>
+          
+          <div class="table-responsive">
+            <table class="users-table">
+              <thead>
+                <tr>
+                  <th>ID</th>
+                  <th>Username</th>
+                  <th>Email</th>
+                  <th>Tipo</th>
+                  <th>Fecha Registro</th>
+                </tr>
+              </thead>
+              <tbody id="usersTableBody">
+                <!-- Los usuarios se cargarán aquí dinámicamente -->
+              </tbody>
+            </table>
+          </div>
+        </div>
+        
+  
+      </section>
+    </div>
+  </main>
+  
+  <script src="scripts/modo_admin.js"></script>
+  <script src="scripts/usuario_admin.js"></script>
+  <script src="scripts/paquetes_admin.js"></script>
+ 
+  
+  <script>
+    // Script para manejar el cambio de pestañas
+    document.addEventListener('DOMContentLoaded', function() {
+      const tabBtns = document.querySelectorAll('.tab-btn');
+      const tabContents = document.querySelectorAll('.tab-content');
+      const menuLinks = document.querySelectorAll('.admin-menu a');
+      
+      // Cambiar pestaña al hacer clic en los botones
+      tabBtns.forEach(btn => {
+        btn.addEventListener('click', function() {
+          const tabName = this.getAttribute('data-tab');
+          
+          // Actualizar botones
+          tabBtns.forEach(b => b.classList.remove('active'));
+          this.classList.add('active');
+          
+          // Actualizar contenido
+          tabContents.forEach(content => content.classList.remove('active'));
+          document.getElementById(`${tabName}-tab`).classList.add('active');
+          
+          // Actualizar menú lateral
+          menuLinks.forEach(link => link.classList.remove('active'));
+          document.querySelector(`.admin-menu a[data-tab="${tabName}"]`).classList.add('active');
+        });
+      });
+      
+      // Cambiar pestaña al hacer clic en el menú lateral
+      menuLinks.forEach(link => {
+        link.addEventListener('click', function(e) {
+          if (this.hasAttribute('data-tab')) {
+            e.preventDefault();
+            const tabName = this.getAttribute('data-tab');
+            
+            // Actualizar menú lateral
+            menuLinks.forEach(l => l.classList.remove('active'));
+            this.classList.add('active');
+            
+            // Actualizar botones
+            tabBtns.forEach(b => b.classList.remove('active'));
+            document.querySelector(`.tab-btn[data-tab="${tabName}"]`).classList.add('active');
+            
+            // Actualizar contenido
+            tabContents.forEach(content => content.classList.remove('active'));
+            document.getElementById(`${tabName}-tab`).classList.add('active');
+          }
+        });
+      });
+    });
+  </script>
+</body>
+</html>
